@@ -49,7 +49,7 @@ services:
      PACKETBEAT_CERTS_DIR: '${PACKETBEAT_CERTS_DIR}'
     network_mode: host
     extra_hosts:
-     - "elastic:18.208.139.244"
+     - "elastic:52.22.153.155"
     cap_add:
      - NET_ADMIN
   #filebeat:
@@ -79,7 +79,7 @@ services:
      ELASTICSEARCH_PASSWORD: '${ELASTICSEARCH_PASSWORD}'
      METRICBEAT_CERTS_DIR: '${METRICBEAT_CERTS_DIR}'
     extra_hosts:
-     - "elastic:18.208.139.244"
+     - "elastic:52.22.153.155"
 volumes:
   cowrie-etc:
    driver: local
