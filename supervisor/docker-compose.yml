@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+  cowrie:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "2222:2222"
+      - "2223:2223"
+    volumes:
+      - cowrie-etc:/cowrie/cowrie-git/etc
+      - cowrie-var:/cowrie/cowrie-git/var/log/cowrie
+  dionaea:
+    build:
+      context: '/home/ubuntu/docker-cowrie/dionaea-docker/0.6'
+      dockerfile: Dockerfile
+    ports: 
+      - "21:21"
+      - "23:23"
+      - "69:69"
+      - "11211:11211"
+      - "27017:27017"
+      - "1433:1433"
+      - "3306:3306"
+      - "445:445"
+      - "1900:1900"
+      - "1883:1883"
+      - "135:135"
+      - "5060:5060"
+      - "5061:5061"
+      - "1723:1723"
+      - "80:80"
+      - "443:443"
+      - "42:42"
+      - "123:123"
+    volumes: 
+      - './dionaeaSqliteToJson.py:/opt/dionaeaSqliteToJson.py'
+      - dionaea-logs:/opt/dionaea/var/dionaea
+      - './mysql.yaml:/opt/dionaea/etc/dionaea/services/mysql.yaml'
+  packetbeat:
+    image: docker.elastic.co/beats/packetbeat:7.5.1
+    container_name: packetbeat
+    volumes:
+     - './packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro'
+     - './packetbeat_certificates:/usr/share/packetbeat/config/certificates'
+    environment:
+     ELASTICSEARCH_HOSTS: '${ELASTICSEARCH_HOSTS}'
+     ELASTICSEARCH_USERNAME: '${ELASTICSEARCH_USERNAME}'
+     ELASTICSEARCH_PASSWORD: '${ELASTICSEARCH_PASSWORD}'
+     PACKETBEAT_CERTS_DIR: '${PACKETBEAT_CERTS_DIR}'
+    network_mode: host
+    extra_hosts:
+     - "elastic:18.208.139.244"
+    cap_add:
+     - NET_ADMIN
+  #filebeat:
+    #image: docker.elastic.co/beats/filebeat:7.5.1
+    #container_name: filebeat
+    #volumes: 
+      #- './filebeat.yml:/usr/share/filebeat/filebeat.yml'
+      #- 'cowrie-var:/data/cowrie'
+      #- 'dionaea-logs:/data/dionaea'
+      #- './filebeat_certificates:/usr/share/filebeat/config/certificates'
+    #environment:
+     #ELASTICSEARCH_HOSTS: '${ELASTICSEARCH_HOSTS}'
+     #ELASTICSEARCH_USERNAME: '${ELASTICSEARCH_USERNAME}'
+     #ELASTICSEARCH_PASSWORD: '${ELASTICSEARCH_PASSWORD}'
+     #FILEBEAT_CERTS_DIR: '${FILEBEAT_CERTS_DIR}'
+    #extra_hosts:
+     #- "elastic:54.209.183.45"
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.5.1
+    container_name: metricbeat
+    volumes:
+     - './metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro'
+     - './metricbeat_certificates:/usr/share/metricbeat/config/certificates'
+    environment:
+     ELASTICSEARCH_HOSTS: '${ELASTICSEARCH_HOSTS}'
+     ELASTICSEARCH_USERNAME: '${ELASTICSEARCH_USERNAME}'
+     ELASTICSEARCH_PASSWORD: '${ELASTICSEARCH_PASSWORD}'
+     METRICBEAT_CERTS_DIR: '${METRICBEAT_CERTS_DIR}'
+    extra_hosts:
+     - "elastic:18.208.139.244"
+volumes:
+  cowrie-etc:
+   driver: local
+  cowrie-var:
+   driver: local
+  filebeat.yml:
+   driver: local
+  dionaea-logs.log:
+   driver: local 
+  dionaea-logs:
+   driver: local

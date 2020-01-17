@@ -1,0 +1,24 @@
+filebeat.inputs:
+- type: log
+  paths:
+    - /data/cowrie/cowrie.json*
+  fields:
+    document_type: cowrie
+  fields_under_root: true
+- type: log
+  paths:
+    - /data/dionaea/dionaea-errors.log*
+  fields:
+    document_type: dionaea
+  fields_under_root: true
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS}'
+  username: '${ELASTICSEARCH_USERNAME}'
+  password: '${ELASTICSEARCH_PASSWORD}'
+  protocol: https
+  ssl.certificate_authorities:
+    - ${FILEBEAT_CERTS_DIR}/ca/ca.crt
+  ssl.certificate: ${FILEBEAT_CERTS_DIR}/filebeat.crt
+  ssl.key: ${FILEBEAT_CERTS_DIR}/filebeat.key
+

@@ -1,0 +1,39 @@
+metricbeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    # Reload module configs as they change:
+    reload.enabled: false
+
+metricbeat.modules:
+- module: system
+  metricsets:
+    - "core"
+    - "cpu"
+    - "diskio"
+    - "entropy"
+    - "filesystem"
+    - "fsstat"
+    - "load"
+    - "memory"
+    - "network"
+    - "process"
+    - "process_summary"
+    - "socket"
+    - "socket_summary"
+    - "uptime"
+  period: 5s
+
+processors:
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS}'
+  username: '${ELASTICSEARCH_USERNAME}'
+  password: '${ELASTICSEARCH_PASSWORD}'
+  pipeline: geoip-info
+  protocol: https
+  ssl.certificate_authorities:
+    - ${METRICBEAT_CERTS_DIR}/ca/ca.crt
+  ssl.certificate: ${METRICBEAT_CERTS_DIR}/metricbeat.crt
+  ssl.key: ${METRICBEAT_CERTS_DIR}/metricbeat.key
+  
