@@ -18,8 +18,6 @@ RUN /bin/bash /build/bin/build.sh && \
 
 COPY supervisor/*.conf /etc/supervisor/conf.d/
 COPY conf /opt/dionaea/etc/dionaea
-COPY cron.txt /opt
-RUN  crontab /opt/cron.txt
 
 EXPOSE 21 23 42 69/udp 80 135 443 445 1433 1723 1883 1900/udp 3306 5060 5060/udp 5061 11211
 

@@ -4,7 +4,7 @@ services:
   cowrie:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileCowrie
     ports:
       - "2222:2222"
       - "2223:2223"
@@ -14,7 +14,7 @@ services:
   dionaea:
     build:
       context: .
-      dockerfile: Dockerfilee
+      dockerfile: DockerfileDionaea
     ports: 
       - "21:21"
       - "23:23"
