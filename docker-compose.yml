@@ -13,8 +13,8 @@ services:
       - cowrie-var:/cowrie/cowrie-git/var/log/cowrie
   dionaea:
     build:
-      context: '/home/ubuntu/honeys/dionaea-dockers/0.6'
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfilee
     ports: 
       - "21:21"
       - "23:23"
