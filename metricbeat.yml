@@ -27,6 +27,7 @@ processors:
   - add_cloud_metadata: ~
 
 output.elasticsearch:
+  enabled: true
   hosts: '${ELASTICSEARCH_HOSTS}'
   username: '${ELASTICSEARCH_USERNAME}'
   password: '${ELASTICSEARCH_PASSWORD}'
@@ -36,4 +37,10 @@ output.elasticsearch:
     - ${METRICBEAT_CERTS_DIR}/ca/ca.crt
   ssl.certificate: ${METRICBEAT_CERTS_DIR}/metricbeat.crt
   ssl.key: ${METRICBEAT_CERTS_DIR}/metricbeat.key
-  
+  index: 'honeys-metric'
+setup.template.name: "honeysmetric"
+setup.template.pattern: "honeysmetric-*"
+
+
+
+

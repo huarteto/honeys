@@ -2,7 +2,7 @@ packetbeat.interfaces.device: any
 
 packetbeat.flows:
   timeout: 30s
-  period: 10s
+  period: 5s
 
 packetbeat.protocols.dns:
   ports: [53]
@@ -37,10 +37,7 @@ processors:
 - add_cloud_metadata: ~
 
 output.elasticsearch:
-  output.elasticsearch.index: customname-%{event.module}
-  setup.template.name: "customname"
-  setup.template.pattern: "customname"
-  fields: honey
+  enabled: true
   hosts: '${ELASTICSEARCH_HOSTS}'
   username: '${ELASTICSEARCH_USERNAME}'
   password: '${ELASTICSEARCH_PASSWORD}'
@@ -50,4 +47,6 @@ output.elasticsearch:
     - ${PACKETBEAT_CERTS_DIR}/ca/ca.crt
   ssl.certificate: ${PACKETBEAT_CERTS_DIR}/packetbeat.crt
   ssl.key: ${PACKETBEAT_CERTS_DIR}/packetbeat.key
-
+  index: 'honeys-packet'
+setup.template.name: "honeyspacket"
+setup.template.pattern: "honeyspacket-*"
